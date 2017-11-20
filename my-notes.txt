@@ -1,0 +1,56 @@
+// view composer
+
+\View::composer('threads.create', function($view){
+    $view->with('channels', \App\channels::all());
+});
+
+\View::composer('*', function($view){
+    $view->with('channels', \App\Channels::all());
+});
+
+\View::share('channels',
+    $view->with('channels', \App\channels::all());
+);
+
+?by=JohnDoe
+//returns id of user
+\App\User::where('name', $username)->firstOrFail()->id;
+
+
+ThreadFilter $filters 
+$thread = Thread::filter($filters)->get();
+
+public function scopeFilter($query, $filter){
+    return $filter->apply($query);
+}
+
+
+// inserting records using factory
+
+factory('App\User', 50)->create()->each(function($u){
+    $u->posts()->save(factory('App\Posts')->make());
+});
+
+// Cache the channels list
+$channels = \Cache::rememberForever('channels', function(){
+    return \App\Channels::all();
+});
+
+@forelse
+@empty
+@endforelse
+
+cheats.jesse-obrien.ca
+
+
+// creating authorization policy methods
+public function update($user, $thread){
+    return $user->id === $thread->user_id;
+}
+
+$this->authorize('update', $thread);
+
+blade syntax
+@can('update', $thread)
+    // your blade code here..
+@endcan

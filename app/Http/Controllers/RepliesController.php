@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Thread;
 use Illuminate\Http\Request;
 
-class ReplyController extends Controller
+class RepliesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,9 +34,19 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($channel, Thread $thread)
     {
-        //
+
+        $this->validate(request(), [
+            'body' => 'required'
+        ]);
+
+        $thread->addReply([
+            'user_id' => auth()->id(),
+            'body' => request('body')
+        ]);
+        
+        return back();
     }
 
     /**
