@@ -4,6 +4,9 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use App\Activity;
+
 
 class ActivityTest extends TestCase
 {
@@ -32,6 +35,34 @@ class ActivityTest extends TestCase
         $this->actingAs( $user);
         $reply = factory('App\Reply')->create(['user_id' => $user->id]);
         $this->assertEquals( 2, \App\Activity::count());
+    }
+
+    public function test_it_fetches_feed_of_any_user(){
+        $user = factory('App\User')->create();
+        $this->actingAs($user);
+
+        factory('App\Thread')->create(['user_id' => $user->id]);
+
+        $thread = factory('App\Thread')->create([
+            'user_id' => $user->id,
+            'created_at' => Carbon::now()->subWeek()
+        ]);
+        $thread->activity()->update(['created_at' => Carbon::now()->subWeek()]);
+
+        $feed = Activity::feed(auth()->user());
+
+        //dd($feed->toArray());
+
+       
+        $this->assertTrue( $feed->keys()->contains(
+            Carbon::now()->format('Y-m-d')
+        ));
+
+        $this->assertTrue( $feed->keys()->contains(
+            Carbon::now()->subWeek()->format('Y-m-d')
+        ));
+        
+       
     }
 
 }

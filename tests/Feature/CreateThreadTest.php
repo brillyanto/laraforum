@@ -82,14 +82,28 @@ class CreateThreadTest extends TestCase
         // browser request
         $response = $this->delete($thread->path());
 
-
         $response->assertRedirect('/threads');
         // jason request
+        
         // $response = $this->json('DELETE', $thread->path());
         //$response->assertStatus(204);
         
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
         
+        // method 1
+        // $this->assertDatabaseMissing('activities', [
+        //     'subject_id' => $thread->id,
+        //     'subject_type' => get_class($thread)
+        // ]);
+
+        // $this->assertDatabaseMissing('activities', [
+        //     'subject_id' => $reply->id,
+        //     'subject_type' => get_class($reply)
+        // ]);
+
+        // method 2
+        $this->assertEquals(0, \App\Activity::count());
+
     }
 }

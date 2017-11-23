@@ -30,7 +30,16 @@ class Thread extends Model
         });
 
         static::deleting(function($thread){
-            $thread->replies()->delete();
+
+            // $thread->replies()->delete(); // does not fire the model events for replies instead use the following method
+            // method 1
+            // $thread->replies->each(function($reply){
+            //     $reply->delete();
+            // });
+
+            // method 2
+                $thread->replies->each->delete();
+
         });
    
 
