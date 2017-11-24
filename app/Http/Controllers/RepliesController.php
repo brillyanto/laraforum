@@ -46,7 +46,8 @@ class RepliesController extends Controller
             'body' => request('body')
         ]);
         
-        return back();
+        return back()
+        ->with('flash', 'Your reply has been posted');
     }
 
     /**

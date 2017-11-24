@@ -54,3 +54,7 @@ blade syntax
 @can('update', $thread)
     // your blade code here..
 @endcan
+
+///// npm
+
+npm run dev
